@@ -1,8 +1,8 @@
 language: julia
 os:
-  - linux
+- linux
 julia:
-  - 1.0
+- 1.0
 notifications:
   email: false
 git:
@@ -10,17 +10,23 @@ git:
 cache:
   timeout: 1000
   directories:
-    - downloads
+  - downloads
 env:
   global:
-    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
-    - BINARYBUILDER_AUTOMATIC_APPLE=false
+  - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+  - BINARYBUILDER_AUTOMATIC_APPLE=false
 sudo: required
-
-# Before anything else, get the latest versions of things
 before_script:
-  - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
-
+- julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
 script:
-  - julia build_tarballs.jl
-
+- julia build_tarballs.jl
+deploy:
+  provider: releases
+  api_key:
+    secure: nXNdkoZiTwOK7Qdo0RJ4Ph/CxsKukr0u1t8oxPiaFgxpPNtzILrvOukrMNjix1J3Q3ExVqUd8W7HUL9YIaIyvRZv7baoWkfeFHmRf1GIcbIwSkqTgdJMximZq4HewjXUZI7QpgGmzeVAIqwZgbLOLFzEoaqeiwAZ8FvJXygOle5ZvfhRC1iGPhOQGMoheofzVcc6MLvU0GD27aj2vvagZrFZEhcXwpGxFX93KgZK4eG094MW9MyPKaDYYR1EDwWBZAdM6ct22zavknutuELUC5ThI4djA27IobYHXTSvErPK639+MULtqDBDIov5ZlidLUBT4h6PG7xUWHYKhGtqviFVUgzgF5kxfEIqF0Bmr+sBeYBn4ZGL3rouQouIruNgHo7XDeLEZUebHaRJDWvIJxWirEiJzdUyULr8G5Pkpwu3qb22Uj16cofaJKm+5eqRVbFNFaG5/TWEw+1/v7mPxhDm7A071K5T/CmxTWE8q9Fw29rbPm+Z/CSV496fMyzCzgYTUjMUgTwX8WQrE2jEBsDSb0Ev5yhXMSvEnMI3Tw0IM7YNI10yoYHU55i4v94tN43LaQRZzuhTmy+sWJI4RBNXd+KfhZnAeFT1QsHDBTSTAg9FPSG8GJjs1OT7aIHxq54HuVlXxQG74CxOGwassoPHiOYwUPbvc0ioKs+Fqsw=
+  file_glob: true
+  file: products/*
+  skip_cleanup: true
+  on:
+    repo: yukota/PulseAudioBuilder
+    tags: true
